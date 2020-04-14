@@ -61,11 +61,11 @@ def main():
 				  open_mindedness=55, species="Starfish", sex="male", gender="male")
 	v16 = Villager(name="Squidward", surname="Tentacles", age=27, social=33, giving=10, happiness=23, 
 				  open_mindedness=60, species="Squid", sex="male", gender="male")
-	v16 = Villager(name="Eugene", surname="Krabs", age=51, social=62, giving=1, happiness=40, 
+	v17 = Villager(name="Eugene", surname="Krabs", age=51, social=62, giving=1, happiness=40, 
 				  open_mindedness=33, species="Crab", sex="male", gender="male")
-	v16 = Villager(name="Pearl", surname="Krabs", age=16, social=95, giving=35, happiness=40, 
+	v18 = Villager(name="Pearl", surname="Krabs", age=16, social=95, giving=35, happiness=40, 
 				  open_mindedness=40, species="Whale", sex="female", gender="female")
-	v16 = Villager(name="Plankton", surname="", age=35, social=15, giving=5, happiness=5, 
+	v19 = Villager(name="Plankton", surname="", age=35, social=15, giving=5, happiness=5, 
 				  open_mindedness=55, species="Plankton", sex="male", gender="male")
 	#social 65
 	#happy 82
@@ -77,7 +77,7 @@ def main():
 	print(v4.printBio())
 	print(v5.printBio())
 	#npcs = set([ v1, v2, v3, v4, v5 ]
-	npcs = [ v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13 ]
+	npcs = [ v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19 ]
 	for n in npcs:
 		primeDiagnostics(n)
 	while True:
