@@ -6,7 +6,7 @@ class Villager:
 				 gender="none", species="Robot", sex_attractions=[], 
 				 gender_attractions=[], species_attractions=["Robot"],
 				 happiness=50, open_mindedness=50, 
-				 social=50, giving=50, money=0, beliefs={}, 
+				 social=50, giving=50, funnybone=50, money=0, beliefs={}, 
 				 modifiers=[], coalitions=[], items=[], family={}, 
 				 friends={}, enemies={}, properties=[]):
 		self.name = name
@@ -22,6 +22,7 @@ class Villager:
 		self.open_mindedness = open_mindedness
 		self.social = social
 		self.giving = giving
+		self.funnybone = funnybone
 		self.money = money
 		self.beliefs = beliefs
 		self.modifiers = modifiers
@@ -31,195 +32,167 @@ class Villager:
 		self.friends = friends
 		self.enemies = enemies
 		self.properties = properties
-		self.time_init = datetime.datetime.now().time()
+		self.time_init = str(datetime.datetime.now().time()).replace("/","-")
 
 	def influence(self, other, influence):
-		changes = []
-		if influence > 0:
-			change = int((25 / (150 - self.open_mindedness)) * influence)
-			if other.happiness < self.happiness:
-				if other.happiness > self.happiness - change:
-					changes.append(other.happiness - self.happiness)
-					self.happiness = other.happiness
-				else:
-					if self.happiness - change < 1:
-						changes.append(1 - self.happiness)
-						self.happiness = 1
-					else:
-						changes.append(-1 * change)
-						self.happiness -= change
-			elif other.happiness > self.happiness:
-				if other.happiness < self.happiness + change:
-					changes.append(other.happiness - self.happiness)
-					self.happiness = other.happiness
-				else:
-					if self.happiness + change > 100:
-						changes.append(100 - self.happiness)
-						self.happiness = 100
-					else:
-						changes.append(change)
-						self.happiness += change
-			else:
-				changes.append(0)
 
-			change = int((13 / (150 - self.open_mindedness)) * influence)
+		changes = []
+		change = int(influence / 5)
+		if self.happiness + change < 1:
+			change = self.happiness - 1
+		elif self.happiness + change > 100:
+			change = 100 - self.happiness
+		changes.append(change)
+		if influence > 0:
+			change = int((13 / (125 - self.open_mindedness)) * influence)
 			if other.social < self.social:
 				if other.social > self.social - change:
 					changes.append(other.social - self.social)
-					self.social = other.social
 				else:
 					if self.social - change < 1:
 						changes.append(1 - self.social)
-						self.social = 1
 					else:
 						changes.append(-1 * change)
-						self.social -= change
 			elif other.social > self.social:
 				if other.social < self.social + change:
 					changes.append(other.social - self.social)
-					self.social = other.social
 				else:
 					if self.social + change > 100:
 						changes.append(100 - self.social)
-						self.social = 100
 					else:
 						changes.append(change)
-						self.social += change
 			else:
 				changes.append(0)
 					
-			change = int((22 / (150 - self.open_mindedness)) * influence)
+			change = int((22 / (125 - self.open_mindedness)) * influence)
 			if other.giving < self.giving:
 				if other.giving > self.giving - change:
 					changes.append(other.giving - self.giving)
-					self.giving = other.giving
 				else:
 					if self.giving - change < 1:
 						changes.append(1 - self.giving)
-						self.giving = 1
 					else:
 						changes.append(-1 * change)
-						self.giving -= change
 			elif other.giving > self.giving:
 				if other.giving < self.giving + change:
 					changes.append(other.giving - self.giving)
-					self.giving = other.giving
 				else:
 					if self.giving + change > 100:
 						changes.append(100 - self.giving)
-						self.giving = 100
 					else:
 						changes.append(change)
-						self.giving += change
 			else:
 				changes.append(0)
 					
-			change = int((6 / (150 - self.open_mindedness)) * influence)
+			change = int((10 / (125 - self.funnybone)) * influence)
+			if other.funnybone < self.funnybone:
+				if other.funnybone > self.funnybone - change:
+					changes.append(other.funnybone - self.funnybone)
+				else:
+					if self.funnybone - change < 1:
+						changes.append(1 - self.funnybone)
+					else:
+						changes.append(-1 * change)
+			elif other.funnybone > self.funnybone:
+				if other.funnybone < self.funnybone + change:
+					changes.append(other.funnybone - self.funnybone)
+				else:
+					if self.funnybone + change > 100:
+						changes.append(100 - self.funnybone)
+					else:
+						changes.append(change)
+			else:
+				changes.append(0)
+					
+			change = int((6 / (125 - self.open_mindedness)) * influence)
 			if other.open_mindedness < self.open_mindedness:
 				if other.open_mindedness > self.open_mindedness - change:
 					changes.append(other.open_mindedness - self.open_mindedness)
-					self.open_mindedness = other.open_mindedness
 				else:
 					if self.open_mindedness - change < 1:
 						changes.append(1 - self.open_mindedness)
-						self.open_mindedness = 1
 					else:
 						changes.append(-1 * change)
-						self.open_mindedness -= change
 			elif other.open_mindedness > self.open_mindedness:
 				if other.open_mindedness < self.open_mindedness + change:
 					changes.append(other.open_mindedness - self.open_mindedness)
-					self.open_mindedness = other.open_mindedness
 				else:
 					if self.open_mindedness + change > 100:
 						changes.append(100 - self.open_mindedness)
-						self.open_mindedness = 100
 					else:
 						changes.append(change)
-						self.open_mindedness += change
 			else:
 				changes.append(0)
 
 		elif influence < 0:
-			change = -1 * int((25 / (150 - self.open_mindedness)) * influence)
-			if other.happiness < self.happiness:
-				if self.happiness + change > 100:
-					changes.append(100 - self.happiness)
-					self.happiness = 100
-				else:
-					changes.append(change)
-					self.happiness += change
-			elif other.happiness > self.happiness:
-				if self.happiness - change < 1:
-					changes.append(1 - self.happiness)
-					self.happiness = 1
-				else:
-					changes.append(-1 * change)
-					self.happiness -= change
-			else:
-				changes.append(0)
-
-			change = -1 * int((13 / (150 - self.open_mindedness)) * influence)
+			change = -1 * int((13 / (125 - self.open_mindedness)) * influence)
 			if other.social < self.social:
 				if self.social + change > 100:
 					changes.append(100 - self.social)
-					self.social = 100
 				else:
 					changes.append(change)
-					self.social += change
 			elif other.social > self.social:
 				if self.social - change < 1:
 					changes.append(1 - self.social)
-					self.social = 1
 				else:
 					changes.append(-1 * change)
-					self.social -= change
 			else:
 				changes.append(0)
 					
-			change = -1 * int((22 / (150 - self.open_mindedness)) * influence)
+			change = -1 * int((22 / (125 - self.open_mindedness)) * influence)
 			if other.giving < self.giving:
 				if self.giving + change > 100:
 					changes.append(100 - self.giving)
-					self.giving = 100
 				else:
 					changes.append(change)
-					self.giving += change
 			elif other.giving > self.giving:
 				if self.giving - change < 1:
 					changes.append(1 - self.giving)
-					self.giving = 1
 				else:
 					changes.append(-1 * change)
-					self.giving -= change
 			else:
 				changes.append(0)
 
-			change = -1 * int((6 / (150 - self.open_mindedness)) * influence)
+			change = -1 * int((10 / (125 - self.funnybone)) * influence)
+			if other.funnybone < self.giving:
+				if self.funnybone + change > 100:
+					changes.append(100 - self.funnybone)
+				else:
+					changes.append(change)
+			elif other.funnybone > self.funnybone:
+				if self.funnybone - change < 1:
+					changes.append(1 - self.funnybone)
+				else:
+					changes.append(-1 * change)
+			else:
+				changes.append(0)
+
+			change = -1 * int((6 / (125 - self.open_mindedness)) * influence)
 			if other.open_mindedness < self.giving:
 				if self.open_mindedness + change > 100:
 					changes.append(100 - self.open_mindedness)
-					self.open_mindedness = 100
 				else:
 					changes.append(change)
-					self.open_mindedness += change
 			elif other.open_mindedness > self.open_mindedness:
 				if self.open_mindedness - change < 1:
 					changes.append(1 - self.open_mindedness)
-					self.open_mindedness = 1
 				else:
 					changes.append(-1 * change)
-					self.open_mindedness -= change
 			else:
 				changes.append(0)
 		else:
-			changes = [0, 0, 0, 0]
-		print(changes)
+			changes = changes + [0, 0, 0, 0]
+
+		self.happiness += changes[0]
+		self.social += changes[1]
+		self.giving += changes[2]
+		self.funnybone += changes[3]
+		self.open_mindedness += changes[4]
 		self.printBio(changes=changes)
 				
 
 
-	def printBio(self, changes=["", "", "", ""]):
+	def printBio(self, changes=["", "", "", "", ""]):
 		
 
 		matrix = [["name:", self.name, ""],
@@ -232,9 +205,10 @@ class Villager:
 				  ["gender_attractions:", self.gender_attractions, ""],
 				  ["species_attractions:", self.species_attractions, ""],
 				  ["happiness:", self.happiness, changes[0]],
-				  ["open_mindedness:", self.open_mindedness, changes[3]],
+				  ["open_mindedness:", self.open_mindedness, changes[4]],
 				  ["social:", self.social, changes[1]],
 				  ["giving:", self.giving, changes[2]],
+				  ["funnybone:", self.funnybone, changes[3]],
 				  ["money:", self.money, ""],
 				  ["beliefs:", self.beliefs, ""],
 				  ["modifiers:", self.modifiers, ""],

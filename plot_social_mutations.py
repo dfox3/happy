@@ -22,7 +22,7 @@ def main():
 
 	if not os.path.exists(str(options.i) + "/figures"):
 		os.makedirs(str(options.i) + "/figures")
-
+	header = []
 	data_list = []
 	for file_name in glob.glob(str(options.i) + "*.csv"):
 		print(file_name)
@@ -37,7 +37,7 @@ def main():
 	df = pd.DataFrame.from_records(data_list, columns=header)
 	print(df)
 
-	y_vals = ["happiness", "social", "open_mindedness", "giving"]
+	y_vals = ["happiness", "social", "open_mindedness", "giving", "funnybone"]
 
 	for y in y_vals:
 		sns_plot = sns.relplot(x="iteration", y=y, hue="npc", kind="line", data=df, linewidth=.5, alpha=.9)
