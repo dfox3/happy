@@ -6,10 +6,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib as plt
 sns.set_style("darkgrid")
-sns.set_context("paper")
+#sns.set_context("talk")
 #--------------------------------------------------------------------------------------------------
 #Command line input parameters
-parser = argparse.ArgumentParser(description='Spike-ins Tag Reader')
+parser = argparse.ArgumentParser(description='Plot Social Mutations')
 
 parser.add_argument('-i',
                     metavar='-input',
@@ -20,6 +20,7 @@ parser.add_argument('-i',
 def main():
 	options = parser.parse_args()
 
+	log = str(options.i).split("/")[1]
 	if not os.path.exists(str(options.i) + "/figures"):
 		os.makedirs(str(options.i) + "/figures")
 	header = []
@@ -37,15 +38,19 @@ def main():
 	df = pd.DataFrame.from_records(data_list, columns=header)
 	print(df)
 
-	y_vals = ["happiness", "social", "open_mindedness", "giving", "funnybone"]
+	df.sort_values("npc")
 
+	y_vals = ["happiness", "social", "open_mindedness", "giving", "funnybone"]
+	
 	for y in y_vals:
 		sns_plot = sns.relplot(x="iteration", y=y, hue="npc", kind="line", data=df, linewidth=.5, alpha=.9)
+		sns_plot.fig.suptitle(str(log) + " " + str(y) + " mutations comboplot", y=1.03)
 		print("Printing " + str(options.i) + "/figures/" + str(y) + "_comboplot.png")
-		sns_plot.savefig(str(options.i) + "/figures/" + str(y) + "_comboplot.png", dpi=1080)
+		sns_plot.savefig(str(options.i) + "/figures/" + str(y) + "_comboplot.png", dpi=420)
 		sns_plot = sns.relplot(x="iteration", y=y, hue="npc", kind="line", data=df, linewidth=2, alpha=1, col="npc", col_wrap=4)
+		sns_plot.fig.suptitle(str(log) + " " + str(y) + " mutations facetplot", y=1.03)
 		print("Printing " + str(options.i) + "/figures/" + str(y) + "_facetplot.png")
-		sns_plot.savefig(str(options.i) + "/figures/" + str(y) + "_facetplot.png", dpi=360)
+		sns_plot.savefig(str(options.i) + "/figures/" + str(y) + "_facetplot.png", dpi=311)
 
 
 #-------------------------------------------------------------------------------------------

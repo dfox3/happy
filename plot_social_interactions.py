@@ -6,10 +6,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib as plt
 sns.set_style("darkgrid")
-sns.set_context("paper")
+sns.set_context("talk")
 #--------------------------------------------------------------------------------------------------
 #Command line input parameters
-parser = argparse.ArgumentParser(description='Spike-ins Tag Reader')
+parser = argparse.ArgumentParser(description='Plot Social Interactions')
 
 parser.add_argument('-i',
                     metavar='-input',
@@ -24,7 +24,7 @@ def main():
 		os.makedirs(str(options.i) + "/figures")
 	header = []
 	data_list = []
-
+	log = str(options.i).split("/")[1]
 	for file_name in glob.glob(str(options.i) + "*.csv"):
 		print(file_name)
 		temp_lists = []
@@ -38,9 +38,11 @@ def main():
 	df = pd.DataFrame.from_records(data_list, columns=header)
 	print(df)
 
+	received = "sent"
 	receiver = "receiver"
 	if header[3] != "receiver":
 		receiver = "sender"
+		received = "received"
 
 	x_vals = ["dialog", "order", receiver]
 
@@ -48,11 +50,15 @@ def main():
 	if header[2] == "influence":
 		influence = "influence"
 
+	df.sort_values("npc")
+
 	for x in x_vals:
+		plt.pyplot.subplots_adjust(top=0.85)
 		sns_plot = sns.catplot(x, col="npc", col_wrap=4,data=df,kind="count")
 		sns_plot.set_xticklabels(rotation=90)
+		sns_plot.fig.suptitle(str(log) + " " + str(x) + " total " + str(received) + " catfacetplot", y=1.03)
 		print("Printing " + str(options.i) + "/figures/" + str(x) + "_total_catfacetplot.png")
-		sns_plot.savefig(str(options.i) + "/figures/" + str(x) + "_total_catfacetplot.png", dpi=360)
+		sns_plot.savefig(str(options.i) + "/figures/" + str(x) + "_total_catfacetplot.png", dpi=311)
 
 		#sns_plot = sns.barplot(x=x, y=influence, data=df, col="npc", col_wrap=4, kind="count")
 		#sns_plot.set_xticklabels(rotation=90)
@@ -61,13 +67,15 @@ def main():
 
 		sns_plot = sns.catplot(x=x, y=influence, data=df, col="npc", col_wrap=4, kind="bar")
 		sns_plot.set_xticklabels(rotation=90)
+		sns_plot.fig.suptitle(str(log) + " " + str(x) + " mean influence " + str(received) + " catfacetplot", y=1.03)
 		print("Printing " + str(options.i) + "/figures/" + str(x) + "_mean_influence_catfacetplot.png")
-		sns_plot.savefig(str(options.i) + "/figures/" + str(x) + "_mean_influence_catfacetplot.png", dpi=360)
+		sns_plot.savefig(str(options.i) + "/figures/" + str(x) + "_mean_influence_catfacetplot.png", dpi=311)
 
 		sns_plot = sns.catplot(x=x, y=influence, data=df, col="npc", col_wrap=4, kind="box")
 		sns_plot.set_xticklabels(rotation=90)
+		sns_plot.fig.suptitle(str(log) + " " + str(x) + " mean influence " + str(received) + " boxfacetplot", y=1.03)
 		print("Printing " + str(options.i) + "/figures/" + str(x) + "_mean_influence_boxfacetplot.png")
-		sns_plot.savefig(str(options.i) + "/figures/" + str(x) + "_mean_influence_boxfacetplot.png", dpi=360)
+		sns_plot.savefig(str(options.i) + "/figures/" + str(x) + "_mean_influence_boxfacetplot.png", dpi=311)
 
 
 #-------------------------------------------------------------------------------------------
