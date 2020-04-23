@@ -42,6 +42,17 @@ Execute python script.
 python social_interactions.py
 ```
 
+Typically, I use a command like this
+
+```
+python social_interactions.py -i 5000 -l my-log-name -r 100
+```
+
+-i (int) is how many iterations you want to test
+-l (str) is the name of the log (make sure it doesn't have underscores if you want to plot the log data)
+-r (int) is how many iterations do you want to have happen before a recalibration happens
+-t (int) is how many seconds to wait between iterations
+
 ## Concepts
 
 ### Theorheticals
